@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "728357277715",
+    "project_id": "hisushop-3e533",
+    "storage_bucket": "hisushop-3e533.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728357277715:android:2d18ef9a93c3ce6bd36fe6",
+        "android_client_info": {
+          "package_name": "com.hisu.hisushop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728357277715-qjafarksqmf97uld59ie252d9isclna1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUKQH67djKSaaZ3ugeuSmMP22Kbd9Z6x8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728357277715-qjafarksqmf97uld59ie252d9isclna1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
