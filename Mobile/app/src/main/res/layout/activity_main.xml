@@ -8,17 +8,22 @@
     tools:context=".MainActivity">
 
     <EditText
+        android:id="@+id/edtFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First name" />
+
+    <EditText
+        android:id="@+id/edtLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Last name" />
+
+    <EditText
         android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="email" />
-
-
-    <EditText
-        android:id="@+id/edtPwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -26,6 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Login" />
+        android:text="Call Api" />
 
 </LinearLayout>

@@ -1,20 +1,22 @@
 package com.hisu.hisushop;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.hisu.hisushop.api.IApiService;
 import com.hisu.hisushop.databinding.ActivityMainBinding;
+import com.hisu.hisushop.entity.Customer;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mMainBinding;
-    private FirebaseAuth firebaseAuth;
     private ProgressDialog dialog;
 
     @Override
@@ -23,46 +25,36 @@ public class MainActivity extends AppCompatActivity {
         mMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mMainBinding.getRoot());
 
-        mMainBinding.btnLogin.setOnClickListener(view -> login());
+        mMainBinding.btnLogin.setOnClickListener(view -> getCustomerFromApi());
     }
 
-    private void login() {
-        String email = mMainBinding.edtEmail.getText().toString().trim();
-        String password = mMainBinding.edtPwd.getText().toString().trim();
-
-        dialog.setMessage("Working on it...");
+    private void getCustomerFromApi() {
+        dialog.setMessage("Loading...");
         dialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult -> {
-                    dialog.dismiss();
-                    showDialog("Success", authResult.getUser().getEmail());
-                })
-                .addOnFailureListener(e -> {
-                    dialog.dismiss();
-                    showDialog("Error!", e.getMessage());
-                });
-    }
+        IApiService.API_SERVICE.getCustomerByCustomerID(4017).enqueue(new Callback<Customer>() {
+            @Override
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+                dialog.dismiss();
+                Customer customer = response.body();
+                if (customer != null) {
+                    mMainBinding.edtFirstName.setText(customer.getFirstName());
+                    mMainBinding.edtLastName.setText(customer.getLastName());
+                    mMainBinding.edtEmail.setText(customer.getEmail());
+                }
+            }
 
-    private void showDialog(String title, String msg) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(msg)
-                .setPositiveButton("Ok", null).show();
+            @Override
+            public void onFailure(Call<Customer> call, Throwable t) {
+                dialog.dismiss();
+                Log.e("Error", t.getMessage());
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseAuth = FirebaseAuth.getInstance();
         dialog = new ProgressDialog(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (firebaseAuth != null)
-            firebaseAuth.signOut();
-
-        super.onDestroy();
     }
 }
