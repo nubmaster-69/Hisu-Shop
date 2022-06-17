@@ -4,12 +4,17 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -34,6 +39,7 @@ public class LoginFragment extends Fragment {
         toggleClearIconOnEditText(mLoginBinding.edtPwd);
 
         mLoginBinding.btnLogin.setOnClickListener(view -> login());
+        mLoginBinding.tvSwitchToRegister.setOnClickListener(view -> switchToRegister());
 
         return mLoginBinding.getRoot();
     }
@@ -75,22 +81,51 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private boolean validateUserAccount(String username, String password) {
-        return true;
-    }
-
     private void login() {
-        ProgressDialog dialog = new ProgressDialog(getContext());
+//        ProgressDialog dialog = new ProgressDialog(getContext());
 
         String username = mLoginBinding.edtUserName.getText().toString().trim();
         String password = mLoginBinding.edtPwd.getText().toString().trim();
 
-        dialog.setMessage("We're working on it! Please wait...");
-        dialog.show();
+//        dialog.setMessage("We're working on it! Please wait...");
+//        dialog.show();
 
         if(validateUserAccount(username, password)) {
-            dialog.dismiss();
+//            dialog.dismiss();
             mainActivity.setFragment(new HomePageFragment());
         }
+    }
+
+    private boolean validateUserAccount(String username, String password) {
+
+        if(TextUtils.isEmpty(username)) {
+            showError(mLoginBinding.edtUserName, "Username can't be empty!");
+            return false;
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+            showError(mLoginBinding.edtUserName, "Invalid username! Please try again!");
+            return false;
+        }
+
+        if(TextUtils.isEmpty(password)) {
+            showError(mLoginBinding.edtPwd, "Please enter password!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showError(EditText field, String errorMsg) {
+        field.setError(errorMsg);
+        field.requestFocus();
+    }
+
+    private void switchToRegister() {
+        mainActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
+                .replace(mainActivity.getFragmentContainerID(), new RegisterFragment())
+                .commit();
     }
 }

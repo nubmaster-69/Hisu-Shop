@@ -2,8 +2,9 @@
     <string name="app_name">Hisu Shop</string>
     <string name="login_text">Login</string>
     <string name="register_text">Register</string>
-    <string name="username">Email / Phone / Username</string>
+    <string name="username">Email / Username</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="no_account">No account?</string>
     <string name="have_account">Already have an account?</string>
     <string name="login_now">Login now!</string>

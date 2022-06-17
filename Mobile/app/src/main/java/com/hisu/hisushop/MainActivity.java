@@ -1,6 +1,7 @@
 package com.hisu.hisushop;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+
         mMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mMainBinding.getRoot());
 
@@ -26,5 +33,9 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(mMainBinding.viewContainer.getId(), fragment)
                 .commit();
+    }
+
+    public int getFragmentContainerID() {
+        return mMainBinding.viewContainer.getId();
     }
 }
