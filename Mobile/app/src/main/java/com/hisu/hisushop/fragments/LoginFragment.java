@@ -2,6 +2,7 @@ package com.hisu.hisushop.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,11 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.hisu.hisushop.MainActivity;
 import com.hisu.hisushop.R;
 import com.hisu.hisushop.databinding.FragmentLoginBinding;
+import com.hisu.hisushop.util.EditTextUtil;
 
 public class LoginFragment extends Fragment {
 
@@ -35,50 +38,13 @@ public class LoginFragment extends Fragment {
         mainActivity = (MainActivity) getActivity();
         mLoginBinding = FragmentLoginBinding.inflate(inflater, container, false);
 
-        toggleClearIconOnEditText(mLoginBinding.edtUserName);
-        toggleClearIconOnEditText(mLoginBinding.edtPwd);
+        EditTextUtil.toggleClearIconOnEditText(mainActivity, mLoginBinding.edtUserName);
+        EditTextUtil.toggleClearIconOnEditText(mainActivity, mLoginBinding.edtPwd);
 
         mLoginBinding.btnLogin.setOnClickListener(view -> login());
         mLoginBinding.tvSwitchToRegister.setOnClickListener(view -> switchToRegister());
 
         return mLoginBinding.getRoot();
-    }
-
-    private void toggleClearIconOnEditText(EditText editText) {
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.length() > 0)
-                    editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_close, 0);
-                else
-                    editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
-        });
-
-        rightDrawableAction(editText);
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void rightDrawableAction(EditText editText) {
-        editText.setOnTouchListener((view, motionEvent) -> {
-            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                if (motionEvent.getRawX() >= editText.getRight() - editText.getTotalPaddingRight()) {
-                    editText.clearFocus();
-                    editText.setText("");
-                    editText.requestFocus();
-                    return true;
-                }
-            }
-            return false;
-        });
     }
 
     private void login() {
@@ -90,7 +56,7 @@ public class LoginFragment extends Fragment {
 //        dialog.setMessage("We're working on it! Please wait...");
 //        dialog.show();
 
-        if(validateUserAccount(username, password)) {
+        if (validateUserAccount(username, password)) {
 //            dialog.dismiss();
             mainActivity.setFragment(new HomePageFragment());
         }
@@ -98,27 +64,43 @@ public class LoginFragment extends Fragment {
 
     private boolean validateUserAccount(String username, String password) {
 
-        if(TextUtils.isEmpty(username)) {
-            showError(mLoginBinding.edtUserName, "Username can't be empty!");
+        resetEditTextBackground();
+
+        if (TextUtils.isEmpty(username)) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mLoginBinding.edtUserName, "Username can't be empty!"
+            );
             return false;
         }
 
-        if(!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            showError(mLoginBinding.edtUserName, "Invalid username! Please try again!");
+        if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mLoginBinding.edtUserName, "Invalid username! Please try again!"
+            );
             return false;
         }
 
-        if(TextUtils.isEmpty(password)) {
-            showError(mLoginBinding.edtPwd, "Please enter password!");
+        if (TextUtils.isEmpty(password)) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mLoginBinding.edtPwd, "Please enter password!"
+            );
             return false;
         }
 
         return true;
     }
 
-    private void showError(EditText field, String errorMsg) {
-        field.setError(errorMsg);
-        field.requestFocus();
+    private void resetEditTextBackground() {
+        mLoginBinding.edtPwd.setBackground(
+                ContextCompat.getDrawable(mainActivity, R.drawable.edit_text_border_rounded)
+        );
+
+        mLoginBinding.edtUserName.setBackground(
+                ContextCompat.getDrawable(mainActivity, R.drawable.edit_text_border_rounded)
+        );
     }
 
     private void switchToRegister() {

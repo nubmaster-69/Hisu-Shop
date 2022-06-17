@@ -5,7 +5,7 @@
     <string name="username">Email / Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="no_account">No account?</string>
+    <string name="no_account">Need an account?</string>
     <string name="have_account">Already have an account?</string>
     <string name="login_now">Login now!</string>
     <string name="register_now">Register now!</string>

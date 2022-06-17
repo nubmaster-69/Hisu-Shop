@@ -1,22 +1,20 @@
 package com.hisu.hisushop.fragments;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.hisu.hisushop.MainActivity;
 import com.hisu.hisushop.R;
 import com.hisu.hisushop.databinding.FragmentRegisterBinding;
-
-import java.util.Locale;
+import com.hisu.hisushop.util.EditTextUtil;
 
 public class RegisterFragment extends Fragment {
 
@@ -24,11 +22,15 @@ public class RegisterFragment extends Fragment {
     private MainActivity mainActivity;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mainActivity = (MainActivity) getActivity();
         mRegisterBinding = FragmentRegisterBinding.inflate(inflater, container, false);
+
+        EditTextUtil.toggleClearIconOnEditText(mainActivity, mRegisterBinding.edtRegisUsername);
+        EditTextUtil.toggleClearIconOnEditText(mainActivity, mRegisterBinding.edtRegisPwd);
+        EditTextUtil.toggleClearIconOnEditText(mainActivity, mRegisterBinding.edtRegisConfirmPwd);
 
         mRegisterBinding.tvSwitchToLogin.setOnClickListener(view -> switchToLogin());
         mRegisterBinding.btnRegister.setOnClickListener(view -> register());
@@ -54,7 +56,7 @@ public class RegisterFragment extends Fragment {
 //        dialog.setMessage("We're working on it! Please wait...");
 //        dialog.show();
 
-        if(validateUserAccount(username, password, confirmPwd)) {
+        if (validateUserAccount(username, password, confirmPwd)) {
 //            dialog.dismiss();
             mainActivity.setFragment(new HomePageFragment());
         }
@@ -62,36 +64,62 @@ public class RegisterFragment extends Fragment {
 
     private boolean validateUserAccount(String username, String password, String confirmPwd) {
 
-        if(TextUtils.isEmpty(username)) {
-            showError(mRegisterBinding.edtRegisUsername, "Username can't be empty!");
+        resetEditTextBackground();
+
+        if (TextUtils.isEmpty(username)) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mRegisterBinding.edtRegisUsername, "Username can't be empty!"
+            );
             return false;
         }
 
-        if(!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            showError(mRegisterBinding.edtRegisUsername, "Invalid username! Please try again!");
+        if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mRegisterBinding.edtRegisUsername, "Invalid username! Please try again!"
+            );
             return false;
         }
 
-        if(TextUtils.isEmpty(password)) {
-            showError(mRegisterBinding.edtRegisPwd, "Please enter password!");
+        if (TextUtils.isEmpty(password)) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mRegisterBinding.edtRegisPwd, "Please enter password!"
+            );
             return false;
         }
 
-        if(TextUtils.isEmpty(confirmPwd)) {
-            showError(mRegisterBinding.edtRegisConfirmPwd, "Please confirm your password!");
+        if (TextUtils.isEmpty(confirmPwd)) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mRegisterBinding.edtRegisConfirmPwd, "Please confirm your password!"
+            );
             return false;
         }
 
-        if(!confirmPwd.equalsIgnoreCase(password)) {
-            showError(mRegisterBinding.edtRegisConfirmPwd, "Password doesn't match!");
+        if (!confirmPwd.equalsIgnoreCase(password)) {
+            EditTextUtil.showError(
+                    mainActivity,
+                    mRegisterBinding.edtRegisConfirmPwd, "Password doesn't match!"
+            );
             return false;
         }
 
         return true;
     }
 
-    private void showError(EditText field, String errorMsg) {
-        field.setError(errorMsg);
-        field.requestFocus();
+    private void resetEditTextBackground() {
+        mRegisterBinding.edtRegisUsername.setBackground(
+                ContextCompat.getDrawable(mainActivity, R.drawable.edit_text_border_rounded)
+        );
+
+        mRegisterBinding.edtRegisPwd.setBackground(
+                ContextCompat.getDrawable(mainActivity, R.drawable.edit_text_border_rounded)
+        );
+
+        mRegisterBinding.edtRegisConfirmPwd.setBackground(
+                ContextCompat.getDrawable(mainActivity, R.drawable.edit_text_border_rounded)
+        );
     }
 }

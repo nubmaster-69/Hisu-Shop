@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/HisuShop/Mobile/app/src/main/res/drawable/edit_text_border_rounded.xml" value="0.179" />
+        <entry key="..\:/HisuShop/Mobile/app/src/main/res/drawable/edit_text_border_rounded_err.xml" value="0.2365" />
         <entry key="..\:/HisuShop/Mobile/app/src/main/res/drawable/gradient_bg.xml" value="0.1425" />
         <entry key="..\:/HisuShop/Mobile/app/src/main/res/layout/activity_main.xml" value="0.20833333333333334" />
         <entry key="..\:/HisuShop/Mobile/app/src/main/res/layout/fragment_home_page.xml" value="0.22604166666666667" />
